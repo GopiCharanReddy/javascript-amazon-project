@@ -662,7 +662,7 @@ export const products = [
     image:"images/products/backpack.jpg",
     name : "Brown BackPack for College",
     rating : {
-      stars : 4.6,
+      stars : 4.0,
       count : 571
     },
     priceCents : 1900,
@@ -676,10 +676,10 @@ export const products = [
   },
   {
     id : "id2",
-    image : "images/products/umbrella/jpg",
+    image : "images/products/umbrella.jpg",
     name : "Black umbrella",
     rating : {
-      stars : 4.5,
+      stars : 5.0,
       count : 743
     },
     priceCents : 1190,
