@@ -1,14 +1,13 @@
-import { products } from "../data/products.js";
 import {cart} from "../data/cart.js";
-
-let cartSummary;
+import { products } from "../data/products.js";
+let cartSummary='';
 
 cart.forEach((cartItem) => {
     const productId = cartItem.productId;
 
     let matchingProduct;
-    products.forEach(product=>{
-        if(productId === product.id);
+    products.forEach((product)=>{
+        if(product.id === productId)
         {
           matchingProduct = product;
         }
@@ -27,7 +26,7 @@ cart.forEach((cartItem) => {
           ${matchingProduct.name}
         </div>
         <div class="product-price">
-          ${matchingProduct.priceCents / 100}
+          $${matchingProduct.priceCents/100}
         </div>
         <div class="product-quantity">
           <span>
