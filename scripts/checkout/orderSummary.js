@@ -8,13 +8,12 @@ import {
 } from "../../data/cart.js";
 import { products, getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
-import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import { deliveryOptions, getDeliveryOption,deliveryOptionsHTML } from "../../data/deliveryOptions.js";
+import { deliveryOptions, getDeliveryOption,deliveryOptionsHTML,calculateDeliveryDate } from "../../data/deliveryOptions.js";
 import {renderPaymentSummary} from './paymentSummary.js';
 import { renderCheckoutHeader } from "./checkoutHeader.js";
 
 export function renderOrderSummary(){
-let cartSummary = "";
+let cartSummaryHTML = "";
 cart.forEach((cartItem) => {
   const productId = cartItem.productId;
   const matchingProduct = getProduct(productId);
@@ -22,14 +21,13 @@ cart.forEach((cartItem) => {
 
   const deliveryOption = getDeliveryOption(deliveryOptionsId);
   
-  const today = dayjs();
-  const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
-    const dataString = deliveryDate.format("dddd, MMMM D");
-  cartSummary += `<div class="cart-item-container js-cart-item-container-${
+  const dateString =  calculateDeliveryDate(deliveryOption);
+  
+  cartSummaryHTML += `<div class="cart-item-container js-cart-item-container-${
     matchingProduct.id
   }">
     <div class="delivery-date">
-      Delivery date: ${dataString}
+      Delivery date: ${dateString}
     </div>
 
     <div class="cart-item-details-grid">
@@ -76,12 +74,14 @@ cart.forEach((cartItem) => {
   </div>`;
 });
 
-document.querySelector(".js-order-summary").innerHTML = cartSummary;
+document.querySelector(".js-order-summary").innerHTML = cartSummaryHTML;
 
 document.querySelectorAll(".js-delete-link").forEach((link) => {
   link.addEventListener("click", () => {
     const productId = link.dataset.productId;
     removeFromCart(productId);
+    renderCheckoutHeader();
+    renderPaymentSummary();
     renderOrderSummary();
   });
 });
@@ -110,11 +110,9 @@ document.querySelectorAll(".js-save-link").forEach((link) => {
       return;
     }
     updateQuantity(productId, newQuantity);
-    const quantityLabel = document.querySelector(
-      `.js-quantity-label-${productId}`
-    );
-    quantityLabel.innerHTML = newQuantity;
+    renderCheckoutHeader();
     renderOrderSummary();
+    renderPaymentSummary();
   });
   const quantityInput = document.querySelector(
     ".js-quantity-input-" + link.dataset.productId

@@ -27,9 +27,7 @@ export function getDeliveryOption(deliveryOptionId) {
 export function deliveryOptionsHTML(matchingProduct, cartItem) {
   let html = "";
   deliveryOptions.forEach((deliveryOption) => {
-    const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays, "days");
-    const dataString = deliveryDate.format("dddd, MMMM D");
+  const dateString =  calculateDeliveryDate(deliveryOption);
     const priceString =
       deliveryOption.priceCents === 0
         ? "FREE"
@@ -44,7 +42,7 @@ export function deliveryOptionsHTML(matchingProduct, cartItem) {
             name="delivery-option-${matchingProduct.id}">
           <div>
             <div class="delivery-option-date">
-              ${dataString}
+              ${dateString}
             </div>
             <div class="delivery-option-price">
               ${priceString} Shipping
@@ -55,3 +53,21 @@ export function deliveryOptionsHTML(matchingProduct, cartItem) {
   });
   return html;
 };
+function isWeekend(date){
+  const dayOfWeek = date.format('dddd');
+  return dayOfWeek==='Sunday' || dayOfWeek === 'Saturday';
+}
+export function calculateDeliveryDate(deliveryOption){
+  let remainingDays = deliveryOption.deliveryDays;
+  let deliveryDate = dayjs();
+  while (remainingDays > 0){
+    deliveryDate = deliveryDate.add(1,'day');
+    if (!isWeekend(deliveryDate)){
+      remainingDays--;
+    }
+  }
+  const dateString = deliveryDate.format(
+    'dddd, MMMM D'
+  );
+  return dateString;
+}
