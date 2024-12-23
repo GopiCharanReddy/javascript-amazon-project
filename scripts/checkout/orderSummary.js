@@ -102,37 +102,49 @@ document.querySelectorAll(".js-update-link").forEach((link) => {
     container.classList.add("is-editing-quantity");
   });
 });
+
+
 document.querySelectorAll(".js-save-link").forEach((link) => {
   link.addEventListener("click", () => {
-    const productId = link.dataset.productId;
-    const container = document.querySelector(
-      `.js-cart-item-container-${productId}`
-    );
-    container.classList.remove("is-editing-quantity");
-    const quantityInput = document.querySelector(
-      `.js-quantity-input-${productId}`
-    );
-    const newQuantity = Number(quantityInput.value);
-    if (newQuantity < 0 || newQuantity >= 1000) {
-      alert("Quantity must be at least 0 and less than 1000");
-      return;
-    }
-    updateQuantity(productId, newQuantity);
-    renderCheckoutHeader();
-    renderOrderSummary();
-    renderPaymentSummary();
+      const productId = link.dataset.productId;
+      const container = document.querySelector(`.js-cart-item-container-${productId}`);
+      
+      if (container) {
+          container.classList.remove("is-editing-quantity");
+          const quantityInput = document.querySelector(`.js-quantity-input-${productId}`);
+          const newQuantity = Number(quantityInput.value);
+          if (newQuantity < 0 || newQuantity >= 1000) {
+              alert("Quantity must be at least 0 and less than 1000");
+              return;
+          }
+          updateQuantity(productId, newQuantity);
+          renderCheckoutHeader();
+          renderOrderSummary();
+          renderPaymentSummary();
+      } else {
+          console.warn(`Container for product ID ${productId} not found.`);
+      }
   });
-  const quantityInput = document.querySelector(
-    ".js-quantity-input-" + link.dataset.productId
-  );
-  quantityInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      link.click();
-    }
-  });
-  renderCheckoutHeader();
-  renderPaymentSummary();
+
+  const quantityInput = document.querySelector(`.js-quantity-input-${link.dataset.productId}`);
+  if (quantityInput) {
+      quantityInput.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+              link.click();
+          }
+      });
+  } else {
+      console.warn(`Quantity input for product ID ${link.dataset.productId} not found.`);
+  }
 });
+
+// // After setting up the links, you can manipulate the save link
+// const saveLink = document.querySelector('.js-save-link');
+// if (saveLink) {
+//   saveLink.innerHTML = 'Save Order'; // Example manipulation
+// } else {
+//   console.warn('Save link element not found.');
+// }
 
 document.querySelectorAll('.js-delivery-option').forEach((element)=>{
   element.addEventListener('click',()=>{
