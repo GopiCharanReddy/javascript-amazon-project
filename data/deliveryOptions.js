@@ -24,20 +24,24 @@ export function getDeliveryOption(deliveryOptionId) {
   return deliveryOption || deliveryOptions[0];
 };
 export function deliveryOptionsHTML(matchingProduct, cartItem) {
-  let html = "";
-  deliveryOptions.forEach((deliveryOption) => {
-  const dateString =  calculateDeliveryDate(deliveryOption);
-    const priceString =
-      deliveryOption.priceCents === 0
-        ? "FREE"
-        : `$${formatCurrency(deliveryOption.priceCents)} - `;
+    let html = "";
+    deliveryOptions.forEach((deliveryOption) => {
+      const dateString = calculateDeliveryDate(deliveryOption);
+      const priceString =
+        deliveryOption.priceCents === 0
+          ? "FREE"
+          : `$${formatCurrency(deliveryOption.priceCents)} - `;
 
-    const isChecked = deliveryOption.id === cartItem.deliveryOptionsId;
-    html += `<div class="delivery-option js-delivery-option"
+      const isChecked = deliveryOption.id === cartItem.deliveryOptionsId;
+      html += `<div class="delivery-option js-delivery-option
+    js-delivery-option-${matchingProduct.id}-${deliveryOption.id}"
     data-product-id="${matchingProduct.id}"
     data-delivery-option-id="${deliveryOption.id}">
           <input type="radio" ${isChecked ? "checked" : " "}
-            class="delivery-option-input"
+            class="delivery-option-input
+            js-delivery-option-input-${matchingProduct.id}-${
+        deliveryOption.id
+      }"
             name="delivery-option-${matchingProduct.id}">
           <div>
             <div class="delivery-option-date">
@@ -49,9 +53,9 @@ export function deliveryOptionsHTML(matchingProduct, cartItem) {
           </div>
         </div>
     `;
-  });
-  return html;
-};
+    });
+    return html;
+  }
 function isWeekend(date){
   const dayOfWeek = date.format('dddd');
   return dayOfWeek==='Sunday' || dayOfWeek === 'Saturday';
@@ -69,4 +73,14 @@ export function calculateDeliveryDate(deliveryOption){
     'dddd, MMMM D'
   );
   return dateString;
+}
+
+export function validDeliveryOption(deliveryOptionId){
+  let found = false;
+  deliveryOptions.forEach((options)=>{
+    if(options.id === deliveryOptionId){
+      found= true;
+    }
+  });
+  return found;
 }
