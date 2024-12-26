@@ -68,19 +68,19 @@ export function loadProduct(fun){
         return new Clothing(productDetails);
       } else if (productDetails.type === "appliance") {
         return new Appliances(productDetails);
-      }
+      } 
       return new Product(productDetails);
     });
+    console.log('load products')
     if (typeof fun === 'function') {
       fun();
     }
   });
-
-
   xhr.open('GET','https://supersimplebackend.dev/products');
   xhr.send();
 }
 loadProduct();
+
 /*
 export const products = [
   {
