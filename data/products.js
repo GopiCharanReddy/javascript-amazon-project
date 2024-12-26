@@ -58,32 +58,26 @@ export class Appliances extends Product {
   `;
   }
 }
+export let products =[];
+export function loadProduct(fun){
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener('load',()=>{
+    products = JSON.parse(xhr.response).map((productDetails) => {
+      if (productDetails.type === "clothing") {
+        return new Clothing(productDetails);
+      } else if (productDetails.type === "appliance") {
+        return new Appliances(productDetails);
+      }
+      return new Product(productDetails);
+    });
+    console.log('load products');
+      fun();
+  });
+  xhr.open('GET','https://supersimplebackend.dev/products');
+  xhr.send();
+}
+loadProduct();
 /*
-const date = new Date();
-console.log(date.toLocaleTimeString());
-console.log(date);
-
-const object2 = {
-  a:3,
-  b:this.a
-}
-
-  function logThis(){
-  console.log(this);
-}
-logThis.call('hello')
-
-const object3 = {
-  method: ()=>{
-    console.log(this);
-    [1,2,3].forEach(()=>{
-      console.log(this);
-    }) 
-  }
-}
-object3.method();
-*/
-
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -594,3 +588,4 @@ export const products = [
   }
   return new Product(productDetails);
 });
+*/
