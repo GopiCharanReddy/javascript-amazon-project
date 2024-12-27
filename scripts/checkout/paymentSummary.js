@@ -79,4 +79,44 @@ export function renderPaymentSummary() {
     }
      window.location.href = 'orders.html'
   })
+};
+async function loadGreeting(){
+  const response = await fetch('https://supersimplebackend.dev/greeting',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json'
+    },
+    body: JSON.stringify({
+      name: 'gopi'
+    })
+  });
+  const text = await response.text();
+  console.log(text);
 }
+loadGreeting();
+
+async function loadCORS(){
+  try{
+    if(response.status>=400){
+      throw response;
+    }
+    const response = await fetch('https://supersimplebackend.dev',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      }
+    });
+    const text = await response.text();
+    console.log(text);
+  }catch(error){
+    if(error.status===400){
+      const errorMsg =  await error.json();
+      console.log(errorMsg);
+    }else{
+      console.log('Network error. Please try again later');
+      
+    }
+  }
+}
+loadCORS();
+

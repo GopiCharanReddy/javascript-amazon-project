@@ -79,6 +79,13 @@ export function loadProductFetch(){
 return promise;
 }
 
+async function loadGreeting(){
+  const response = await fetch('https://supersimplebackend.dev/greeting');
+  const text = await response.text();
+  console.log(text);
+}
+loadGreeting();
+
 // loadProductFetch().then(()=>{
 //   console.log('next step');
   
@@ -108,7 +115,30 @@ export function loadProduct(fun){
   xhr.open('GET','https://supersimplebackend.dev/products');
   xhr.send();
 }
+// function loadamazon(){
+//   try{
+//     const xhr = new XMLHttpRequest();
+//     xhr.addEventListener('load',()=>{
+//       console.log('goh');
+//     })
+//     xhr.open('GET','https://amazon.com');
+//     xhr.send();
+//   } catch{
+//     console.log('CORS error'); 
+//   }
+// }
+// loadamazon();
 
+/*
+export function loadgreeting(fun){
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener('load',()=>{
+    console.log(xhr.response);
+  })
+  xhr.open('GET','https://supersimplebackend.dev/greeting');
+  xhr.send();
+}
+*/
 /*
 export const products = [
   {
